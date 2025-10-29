@@ -1,0 +1,66 @@
+name: MedMNIST OrganA 224
+seed: 1234
+track: &track True
+energy_sampling_interval: 60
+
+model:
+  class_name: ResNet18
+  module_name: src.models.resnet
+  parameters:
+    num_classes: &num_classes 11
+
+dataloader:
+  class_name: MedMNISTDataloader
+  module_name: src.data.loaders.medmnist
+  parameters:
+    data_dir: ./data
+    dataset_name: OrganAMNIST
+    batch_size: 32
+    num_workers: 8
+    image_size: 224
+    as_rgb: False
+    debug: False
+
+evaluator:
+  class_name: Evaluator
+  module_name: src.core.evaluator
+  parameters:
+    metrics:
+      - accuracy:
+        class_name: Accuracy
+        module_name: torchmetrics
+        parameters:
+          task: multiclass
+          num_classes: 11
+      - accuracy:
+        class_name: AUROC
+        module_name: torchmetrics
+        parameters:
+          task: multiclass
+          num_classes: 11
+trainer:
+  class_name: BaseTrainer
+  module_name: src.core.trainer
+  parameters:
+    num_epochs: 100
+    early_stopping_patience: 10
+    track: *track
+    loss:
+      class_name: CrossEntropyLoss
+      module_name: torch.nn
+      parameters:
+    optimizer:
+      class_name: Adam
+      module_name: torch.optim
+      parameters:
+        lr:  0.001
+        weight_decay: 0.0
+    lr_scheduler:
+      class_name: MultiStepLR
+      module_name: torch.optim.lr_scheduler
+      parameters:
+        gamma: 0.1
+        milestones: !!python/tuple [50, 75]
+experiment:
+  class_name: BaseExperiment
+  module_name: src.core.experiment

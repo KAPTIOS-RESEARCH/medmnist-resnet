@@ -1,0 +1,62 @@
+name: MNIST
+seed: 1234
+track: &track False
+energy_sampling_interval: 60
+
+model:
+  class_name: DefaultCNN
+  module_name: src.models.default
+  parameters:
+
+dataloader:
+  class_name: MNISTDataloader
+  module_name: src.data.loaders.mnist
+  parameters:
+    data_dir: ./data
+    batch_size: 8
+    num_workers: 8
+    debug: True
+
+evaluator:
+  class_name: Evaluator
+  module_name: src.core.evaluator
+  parameters:
+    metrics:
+      - accuracy:
+        class_name: Accuracy
+        module_name: torchmetrics
+        parameters:
+          task: multiclass
+          num_classes: 10
+      - accuracy:
+        class_name: AUROC
+        module_name: torchmetrics
+        parameters:
+          task: multiclass
+          num_classes: 10
+trainer:
+  class_name: BaseTrainer
+  module_name: src.core.trainer
+  parameters:
+    num_epochs: 2
+    early_stopping_patience: 10
+    track: *track
+    loss:
+      class_name: CrossEntropyLoss
+      module_name: torch.nn
+      parameters:
+    optimizer:
+      class_name: Adam
+      module_name: torch.optim
+      parameters:
+        lr:  0.001
+        weight_decay: 0.0
+    lr_scheduler:
+      class_name: MultiStepLR
+      module_name: torch.optim.lr_scheduler
+      parameters:
+        gamma: 0.1
+        milestones: !!python/tuple [50, 75]
+experiment:
+  class_name: BaseExperiment
+  module_name: src.core.experiment

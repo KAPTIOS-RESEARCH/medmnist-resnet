@@ -1,0 +1,14 @@
+export_name: mnist_export
+export_path: './exports'
+model_path: './logs/DefaultTask_27ef/best_model.pth'
+dataset:
+  module_name: torchvision.datasets
+  class_name: MNIST
+  parameters:
+    root: ./data
+    train: False
+    download: True
+model:
+  class_name: DefaultCNN
+  module_name: src.models.default
+  parameters:

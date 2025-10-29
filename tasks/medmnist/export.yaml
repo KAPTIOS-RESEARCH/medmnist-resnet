@@ -1,0 +1,18 @@
+export_name: medmnist_export
+export_path: './exports'
+model_path: './logs/MedMNIST_234b/best_model.pth'
+
+dataset:
+  module_name: src.data.sets.medmnist
+  class_name: MedMNISTDataset
+  parameters:
+    data_dir: ./data
+    dataset_name: OrganSMNIST
+    image_size: 64
+    split: val
+
+model:
+  class_name: ResNet18
+  module_name: src.models.resnet
+  parameters:
+    num_classes: 11
