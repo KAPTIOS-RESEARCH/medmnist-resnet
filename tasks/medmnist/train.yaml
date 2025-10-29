@@ -8,6 +8,7 @@ model:
   module_name: src.models.resnet
   parameters:
     num_classes: &num_classes 11
+    n_input: 1
 
 dataloader:
   class_name: MedMNISTDataloader
@@ -15,7 +16,7 @@ dataloader:
   parameters:
     data_dir: ./data
     dataset_name: OrganAMNIST
-    batch_size: 32
+    batch_size: 16
     num_workers: 8
     image_size: 224
     as_rgb: False
