@@ -95,4 +95,5 @@ class BaseExperiment(AbstractExperiment):
     def run(self):
         train_dl = self.dataloader.train()
         val_dl = self.dataloader.val()
-        self.trainer.fit(train_dl, val_dl, self.log_dir, self.evaluator)
+        test_dl = self.dataloader.test()
+        self.trainer.fit(train_dl, val_dl, test_dl, self.log_dir, self.evaluator)

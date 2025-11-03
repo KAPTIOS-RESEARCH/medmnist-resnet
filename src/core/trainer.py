@@ -92,13 +92,13 @@ class BaseTrainer(object):
     def test(self, test_loader, epoch=None, num_epochs=None, evaluator=None):
         return self._run_epoch(test_loader, phase="test", epoch=epoch, num_epochs=num_epochs, evaluator=evaluator)
 
-    def fit(self, train_dl, test_dl, log_dir: str, evaluator):
+    def fit(self, train_dl, val_dl, test_dl, log_dir: str, evaluator):
         start_time = time.time()
         num_epochs = self.parameters['num_epochs']
         best_loss = None
         for epoch in range(num_epochs):
             train_loss, train_metrics = self.train(train_dl, epoch, num_epochs, evaluator)
-            val_loss, val_metrics = self.validation(test_dl, epoch, num_epochs, evaluator)
+            val_loss, val_metrics = self.validation(val_dl, epoch, num_epochs, evaluator)
             if self.parameters['track']:
                 log_data = {
                     f"Train/{self.parameters['loss']['class_name']}": train_loss,
